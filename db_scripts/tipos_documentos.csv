@@ -1,0 +1,14 @@
+﻿id,tipo_doc
+CC,Cédula ciudadanía
+CE,Cédula de extranjería
+CD,Carné diplomático
+PA,Pasaporte
+SC,Salvoconducto
+PE,Permiso Especial de Permanencia
+RC,Registro civil
+TI,Tarjeta de identidad
+CN,Certificado de nacido vivo
+AS,Adulto sin identificar
+MS,Menor sin identificar
+DE,Documento extranjero
+SI,Sin información
