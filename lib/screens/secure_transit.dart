@@ -1,4 +1,4 @@
-import 'package:covid_19_app/screens/requirements/info_screen.dart';
+import 'package:covid_19_app/screens/info_screen.dart';
 import 'package:flutter/material.dart';
 
 class SecureTransit extends StatelessWidget {

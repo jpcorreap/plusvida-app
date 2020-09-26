@@ -1,5 +1,5 @@
-import 'package:covid_19_app/screens/protocol/page.dart';
-import 'package:covid_19_app/shared/toast.dart';
+import 'package:covid_19_app/screens/protocols/page.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:flutter/material.dart';
 
 var pag = 0;

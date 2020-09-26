@@ -57,7 +57,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/eli-osjukx-98f90ee63ce8.json
     - assets/eli-osjukx-f28e600af05e.json
     - assets/woman.jpg
     - assets/home_hospital.gif

@@ -1,5 +1,5 @@
-import 'package:covid_19_app/services/dbutils.dart';
-import 'package:covid_19_app/shared/toast.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:flutter/material.dart';
 
 class DailyCheck extends StatefulWidget {

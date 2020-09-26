@@ -1,49 +1,33 @@
-import 'package:covid_19_app/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:covid_19_app/utils/authutils.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:covid_19_app/models/user.dart';
-import 'package:covid_19_app/screens/authenticate/authenticate.dart';
-import 'package:covid_19_app/screens/home/homes.dart';
+import 'package:covid_19_app/screens/auth/authenticate.dart';
+import 'package:covid_19_app/screens/home/start.dart';
 
-void main() => runApp(MyApp());
+/// Main function of the app. It initializes 
+void main() => runApp(PlusVidaApp());
 
-class Wrapper extends StatelessWidget {
+class WrapperAuthStart extends StatelessWidget {
   @override
+  /// return either Home or Authenticate widget based on user logged
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    /*final AuthService _auth = AuthService();
-    return FlatButton.icon(
-      icon: Icon(
-        Icons.person,
-        color: Color(0xffdfedfe),
-      ),
-      label: Text('Cerrar sesión',
-          style: TextStyle(color: Color(0xffdfedfe), fontFamily: "Hind")),
-      onPressed: () async {
-        await _auth.signOut();
-      },
-    );*/
-    // return either Home or Authenticate widget
-    if (user == null) {
-      print("Wrapper.dart: no se detectó usuario logueado.");
-      return Authenticate();
-    } else {
-      print("Wrapper.dart se tiene al usuario " + user.uid);
-      return Homes();
-    }
+    return user == null ? Authenticate() : Start();
   }
 }
 
-class MyApp extends StatelessWidget {
+/// Represents main class of the app
+class PlusVidaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
-        title: 'COVID-19 App',
+        title: '+Vida',
         theme: ThemeData(fontFamily: 'Lato'),
-        home: Wrapper(),
+        home: WrapperAuthStart(),
         localizationsDelegates: [GlobalMaterialLocalizations.delegate],
         supportedLocales: [const Locale('en'), const Locale('es')],
       ),

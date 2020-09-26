@@ -1,7 +1,8 @@
-import 'package:covid_19_app/screens/authenticate/sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:covid_19_app/screens/authenticate/register.dart';
+import 'package:covid_19_app/screens/auth/sign_in.dart';
+import 'package:covid_19_app/screens/auth/register.dart';
 
+/// Screen wich manages and allow switching between register and sign in.
 class Authenticate extends StatefulWidget {
   @override
   _AuthenticateState createState() => _AuthenticateState();

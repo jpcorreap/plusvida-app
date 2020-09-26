@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:covid_19_app/services/dbutils.dart';
-import 'package:covid_19_app/shared/toast.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'create_or_edit_profile.dart';
 import 'package:url_launcher/url_launcher.dart';

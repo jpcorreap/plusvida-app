@@ -1,8 +1,7 @@
-import 'package:covid_19_app/screens/requirements/profiles/create_or_edit_house.dart';
-import 'package:covid_19_app/screens/requirements/profiles/create_or_edit_profile.dart';
-import 'package:covid_19_app/services/auth.dart';
-import 'package:covid_19_app/shared/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:covid_19_app/screens/profiles/create_or_edit_house.dart';
+import 'package:covid_19_app/screens/profiles/create_or_edit_profile.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 
 class IntroTutorial extends StatelessWidget {
   final callback;

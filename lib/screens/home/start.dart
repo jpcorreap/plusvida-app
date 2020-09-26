@@ -1,14 +1,14 @@
 import 'package:covid_19_app/screens/home/intro_tutorial.dart';
-import 'package:covid_19_app/screens/requirements/profiles/create_or_edit_profile.dart';
-import 'package:covid_19_app/services/auth.dart';
-import 'package:covid_19_app/services/dbutils.dart';
-import 'package:covid_19_app/shared/loading.dart';
+import 'package:covid_19_app/screens/profiles/create_or_edit_profile.dart';
+import 'package:covid_19_app/utils/authutils.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
+import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 
-class Homes extends StatefulWidget {
+class Start extends StatefulWidget {
   @override
-  _HomesState createState() => _HomesState();
+  _StartState createState() => _StartState();
 }
 
 Card buildProfile(userID, username, routeToHome) {
@@ -27,7 +27,7 @@ Card buildProfile(userID, username, routeToHome) {
   ));
 }
 
-class _HomesState extends State<Homes> {
+class _StartState extends State<Start> {
   List userIds;
   List usernames;
   int currentState;
@@ -37,15 +37,15 @@ class _HomesState extends State<Homes> {
   void initState() {
     super.initState();
     currentState = 0; // At beginning it sets loading state
-    fetchHomesData();
+    fetchStartData();
   }
 
   final AuthService _auth = AuthService();
 
-  fetchHomesData() {
+  fetchStartData() {
     //Navigator.pop(context, "Cancel");
     db.getProfileInfo().then((data) {
-      print("Actualización de estado en Homes.dart");
+      print("Actualización de estado en Start.dart");
       
       setState(() {
         if (data != null) {
@@ -68,7 +68,7 @@ class _HomesState extends State<Homes> {
   Widget build(BuildContext context) {
     if (currentState == 0)
       return Loading();
-    else if (currentState == 1) return IntroTutorial(callback: fetchHomesData);
+    else if (currentState == 1) return IntroTutorial(callback: fetchStartData);
 
     return new Scaffold(
       backgroundColor: Color(0xffdfedfe),
@@ -148,7 +148,7 @@ class _HomesState extends State<Homes> {
                         fontWeight: FontWeight.bold),
                   ),
                   splashColor: Colors.redAccent,
-                  onPressed: fetchHomesData,
+                  onPressed: fetchStartData,
                 ),
               ],
             ),*/
@@ -167,7 +167,7 @@ class _HomesState extends State<Homes> {
                 MaterialPageRoute(
                   builder: (context) => ProfileForm(
                     userData: null,
-                    callback: fetchHomesData,
+                    callback: fetchStartData,
                     willBeCabezaDeHogar: false,
                   ),
                 ),

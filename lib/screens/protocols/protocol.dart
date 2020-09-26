@@ -1,4 +1,4 @@
-import 'package:covid_19_app/screens/protocol/subcategory.dart';
+import 'package:covid_19_app/screens/protocols/subcategory.dart';
 import 'package:flutter/material.dart';
 
 class Protocol extends StatefulWidget {

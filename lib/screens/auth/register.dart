@@ -1,6 +1,6 @@
-import 'package:covid_19_app/shared/loading.dart';
+import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:covid_19_app/services/auth.dart';
+import 'package:covid_19_app/utils/authutils.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;

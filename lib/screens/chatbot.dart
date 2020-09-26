@@ -1,6 +1,6 @@
 import 'package:bubble/bubble.dart';
-import 'package:covid_19_app/shared/loading.dart';
-import 'package:covid_19_app/shared/toast.dart';
+import 'package:covid_19_app/screens/widgets_utils/loading.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 

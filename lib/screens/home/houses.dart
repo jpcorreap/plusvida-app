@@ -1,5 +1,5 @@
-import 'package:covid_19_app/services/auth.dart';
-import 'package:covid_19_app/services/dbutils.dart';
+import 'package:covid_19_app/utils/authutils.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:flutter/material.dart';
 
 final AuthService _auth = AuthService();

@@ -1,4 +1,4 @@
-import 'package:covid_19_app/services/dbutils.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:flutter/material.dart';
 
 class HouseCheck extends StatefulWidget {

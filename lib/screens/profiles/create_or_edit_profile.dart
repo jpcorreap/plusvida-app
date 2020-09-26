@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:covid_19_app/services/dbutils.dart';
-import 'package:covid_19_app/shared/autocomplete_input.dart';
-import 'package:covid_19_app/shared/snackbar.dart';
-import 'package:covid_19_app/shared/toast.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
+import 'package:covid_19_app/screens/widgets_utils/autocomplete_input.dart';
+import 'package:covid_19_app/screens/widgets_utils/snackbar.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:covid_19_app/shared/loading.dart';
+import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 
 /// Manages user creation, as well user update of their information
 /// userData Can be either null for representing a new profile, or a user data to update one.

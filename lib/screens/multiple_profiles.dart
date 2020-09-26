@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:covid_19_app/services/dbutils.dart';
+import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
