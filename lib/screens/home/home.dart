@@ -15,25 +15,36 @@ import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:flutter/material.dart';
 import '../chatbot.dart';
 
+/// The Firestore Authentication Services.
 final AuthService _auth = AuthService();
+
+/// The connection to DataBase.
 final DbUtils db = new DbUtils();
+
+/// Roles of the current user. It could contains paciente, profSalud or admin.
 List roles = [];
+
+/// [Stream] to the current user data.
 Stream<DocumentSnapshot> userSnapshot;
 
+/// Main Home menu of the app, once user has been signed and chosen an account.
 class Home extends StatelessWidget {
+  /// ID of the current user.
   final String userID;
-  static const String _title = 'Nuevo Home';
 
+  /// Initializes this Home Widget, setting the [userSnapshot] to the current user account.
+  /// 
+  /// Requires [userID] for the app to know which are the current account chosen.
   Home(this.userID) {
     userSnapshot = db.getUserSnapshot(this.userID);
-    print("En home.dart se estableció un userSnapshot para el ID " + userID);
+    print("home.dart tiene un userSnapshot para el usuario " + userID);
   }
 
   @override
   Widget build(BuildContext context) {
     print("En New Home se trajo el uID " + userID);
     return MaterialApp(
-      title: _title,
+      title: "Inicio",
       home: HomeState(this.userID),
     );
   }

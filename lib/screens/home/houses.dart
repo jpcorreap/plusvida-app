@@ -2,8 +2,13 @@ import 'package:covid_19_app/utils/authutils.dart';
 import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:flutter/material.dart';
 
+/// The Firestore Authentication Services.
 final AuthService _auth = AuthService();
+
+/// The connection to DataBase.
 final DbUtils db = new DbUtils();
+
+/// Roles of the current user. It could contains paciente, profSalud or admin.
 List roles = [];
 
 class HomesDashboard extends StatelessWidget {
