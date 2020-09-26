@@ -40,6 +40,7 @@ class Home extends StatelessWidget {
     print("home.dart tiene un userSnapshot para el usuario " + userID);
   }
 
+  /// Builds main Home menu
   @override
   Widget build(BuildContext context) {
     print("En New Home se trajo el uID " + userID);
@@ -172,7 +173,7 @@ class _HomeState extends State<HomeState> {
     );
   }
 
-  // This function decides wich widgets display according to selected index by the user
+  /// Decides wich widgets display according to selected index by the user
   Widget chooseWidgets(user, context) {
     Widget retornar;
 

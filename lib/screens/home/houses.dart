@@ -210,6 +210,7 @@ class _HomesDashboardState extends State<HomesDashboardState> {
     );
   }
 
+  /// Displays the form to join into a house.
   showJoin() {
     showDialog(
       context: context,

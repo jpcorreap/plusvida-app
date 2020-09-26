@@ -4,12 +4,6 @@ import 'package:flutter/material.dart';
 class SecureTransit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    TextStyle titleStyle = new TextStyle(
-        fontSize: 20.0,
-        fontFamily: "Hind",
-        fontWeight: FontWeight.bold,
-        color: Color(0xff0066d0));
-
     var datos = new Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

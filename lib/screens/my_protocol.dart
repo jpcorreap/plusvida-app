@@ -45,42 +45,43 @@ class MyProtocol extends StatelessWidget {
         ));
   }
 
-  generateMyProtocolCard(Myprotocol) {
+  generateMyProtocolCard(protocol) {
     return Container(
-        alignment: Alignment.center,
-        width: double.infinity,
-        child: Column(
-          children: [
-            Text("$Myprotocol",
+      alignment: Alignment.center,
+      width: double.infinity,
+      child: Column(
+        children: [
+          Text("$protocol",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 50.0,
+                  color: Color(0xff1e3e65))),
+          Container(
+            margin: EdgeInsets.all(20.0),
+            child: new Image(
+              image: new AssetImage(protocol == "Casa"
+                  ? "assets/home.gif"
+                  : "assets/home_hospital.gif"),
+              width: 150.0,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 25.0),
+            child: Text(
+                protocol == "Casa"
+                    ? "Estando en el hogar debes desinfectar los paquetes, además no olvides lorem ipsum dolor sit amet.\n\n"
+                    : protocol == "Hospital"
+                        ? "En el hospital es donde más cuidadosos hay que estar, ojo con las jeringas."
+                        : "No tiene Myprotocolo asignado",
+                textAlign: TextAlign.justify,
+                overflow: TextOverflow.visible,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 50.0,
-                    color: Color(0xff1e3e65))),
-            Container(
-              margin: EdgeInsets.all(20.0),
-              child: new Image(
-                image: new AssetImage(Myprotocol == "Casa"
-                    ? "assets/home.gif"
-                    : "assets/home_hospital.gif"),
-                width: 150.0,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 25.0),
-              child: Text(
-                  Myprotocol == "Casa"
-                      ? "Estando en el hogar debes desinfectar los paquetes, además no olvides lorem ipsum dolor sit amet.\n\n"
-                      : Myprotocol == "Hospital"
-                          ? "En el hospital es donde más cuidadosos hay que estar, ojo con las jeringas."
-                          : "No tiene Myprotocolo asignado",
-                  textAlign: TextAlign.justify,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xff1e3e65),
-                      fontSize: 20.0)),
-            ),
-          ],
-        ));
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xff1e3e65),
+                    fontSize: 20.0)),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -333,6 +333,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  // ignore: unused_element
   void _callWhatsApp() async {
     const url = 'https://wa.me/' + '573052642591';
     if (await canLaunch(url)) {

@@ -3,6 +3,9 @@ import 'package:covid_19_app/screens/profiles/create_or_edit_house.dart';
 import 'package:covid_19_app/screens/profiles/create_or_edit_profile.dart';
 import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 
+/// Clase que muestra el tutorial a alguien que aun no se ha creado una cuenta.
+///
+/// Necesita un [callback] que sera llamado en cuanto se haya completado satisfactoriamente el tutorial.
 class IntroTutorial extends StatelessWidget {
   final callback;
   IntroTutorial({this.callback});
@@ -24,21 +27,28 @@ class IntroTutorialState extends StatefulWidget {
 }
 
 class _IntroTutorialState extends State<IntroTutorialState> {
+  /// Callback que sera llamado cuando se complete el tutorial.
   final callback;
   _IntroTutorialState({@required this.callback});
 
+  /// Almacena la informacion de la casa creada.
   var houseData;
 
-  int _currentIndexPage = 0;
+  /// Pagina actual de navegacion, iniciando en 0.
+  int _currentIndexPage;
+
+  /// Representa si ya se ha creado una cuenta en el tutorial.
   bool hasCreatedAccount;
 
+  /// Inicializa el estado de la clase.
   initState() {
     super.initState();
+    this._currentIndexPage = 0;
     houseData = null;
     hasCreatedAccount = false;
   }
 
-  // This function decides wich screen display according to selected index
+  /// Decides wich screen display according to selected index.
   Widget choosePage(context) {
     List<Widget> widgetsList = [];
 
@@ -89,11 +99,12 @@ class _IntroTutorialState extends State<IntroTutorialState> {
         break;
       default: // IntroTutorial
         {
-          widgetsList.add(Text("PÁGINA default"));
+          widgetsList.add(Text("Default"));
         }
         break;
     }
 
+    // Crea los botones de navegacion.
     widgetsList.add(createNavButtons());
 
     return Center(
@@ -104,60 +115,48 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     );
   }
 
-  // Final build function
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffdfedfe),
-      body: Stack(
-        children: [
-          Image.asset("assets/background_home.png"),
-          new Container(
-            padding: EdgeInsets.all(16.0),
-            child: choosePage(context),
-          ),
-        ],
-      ),
-    );
-  }
-
+  /// Builds the navbar buttons based on the current page.
   Widget createNavButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (_currentIndexPage != 0 && _currentIndexPage != 3)
           new MaterialButton(
-              height: 40.0,
-              minWidth: 90.0,
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text("Anterior"),
-              splashColor: Colors.redAccent,
-              onPressed: () => setState(() {
-                    _currentIndexPage = _currentIndexPage - 1;
-                  })),
+            height: 40.0,
+            minWidth: 90.0,
+            color: Color(0xfff42f63),
+            textColor: Colors.white,
+            child: new Text("Anterior"),
+            splashColor: Colors.redAccent,
+            onPressed: () => setState(
+              () {
+                _currentIndexPage = _currentIndexPage - 1;
+              },
+            ),
+          ),
         if (_currentIndexPage > 0 && _currentIndexPage < 4)
           SizedBox(
             width: 10.0,
           ),
         if (_currentIndexPage == 2)
           new MaterialButton(
-              height: 40.0,
-              minWidth: 100.0,
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text("Crear casa"),
-              splashColor: Colors.redAccent,
-              onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HouseForm(
-                          callback: cbFunction,
-                        ),
-                      ),
-                    ),
-                  }),
+            height: 40.0,
+            minWidth: 100.0,
+            color: Color(0xfff42f63),
+            textColor: Colors.white,
+            child: new Text("Crear casa"),
+            splashColor: Colors.redAccent,
+            onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HouseForm(
+                    callback: cbFunction,
+                  ),
+                ),
+              ),
+            },
+          ),
         if (_currentIndexPage == 2)
           SizedBox(
             width: 10.0,
@@ -173,46 +172,47 @@ class _IntroTutorialState extends State<IntroTutorialState> {
           ),
         if (_currentIndexPage == 3)
           new MaterialButton(
-              height: 40.0,
-              minWidth: 80.0,
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text(hasCreatedAccount == false
-                  ? "Crear cuenta"
-                  : "Ir a mi inicio"),
-              splashColor: Colors.redAccent,
-              onPressed: () => {
-                    if (hasCreatedAccount == false)
-                      {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileForm(
-                              userData: null,
-                              callback: onAccountSuccedCreated,
-                              willBeCabezaDeHogar: true,
-                            ),
-                          ),
-                        ),
-                      }
-                    else
-                      {this.callback()}
-                  }),
+            height: 40.0,
+            minWidth: 80.0,
+            color: Color(0xfff42f63),
+            textColor: Colors.white,
+            child: new Text(
+                hasCreatedAccount == false ? "Crear cuenta" : "Ir a mi inicio"),
+            splashColor: Colors.redAccent,
+            onPressed: () => {
+              if (hasCreatedAccount == false)
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileForm(
+                        userData: null,
+                        callback: onAccountSuccedCreated,
+                        willBeCabezaDeHogar: true,
+                      ),
+                    ),
+                  ),
+                }
+              else
+                {this.callback()}
+            },
+          ),
         if (_currentIndexPage == 3)
           SizedBox(
             width: 10.0,
           ),
         if (_currentIndexPage < 2)
           new MaterialButton(
-              height: 40.0,
-              minWidth: 100.0,
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text("Siguiente"),
-              splashColor: Colors.redAccent,
-              onPressed: () => setState(() {
-                    _currentIndexPage = _currentIndexPage + 1;
-                  })),
+            height: 40.0,
+            minWidth: 100.0,
+            color: Color(0xfff42f63),
+            textColor: Colors.white,
+            child: new Text("Siguiente"),
+            splashColor: Colors.redAccent,
+            onPressed: () => setState(() {
+              _currentIndexPage = _currentIndexPage + 1;
+            }),
+          ),
         if (_currentIndexPage == 3)
           SizedBox(
             width: 10.0,
@@ -221,7 +221,8 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     );
   }
 
-  showJoin() {
+  /// Displays a dialog to login into a House.
+  void showJoin() {
     showDialog(
       context: context,
       builder: (context) {
@@ -284,6 +285,7 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     );
   }
 
+  /// Callback for succed account created
   onAccountSuccedCreated() {
     Toast.show("Cuenta creada exitosamente", context);
     Navigator.pop(context, "");
@@ -293,8 +295,10 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     this.callback();
   }
 
+  /// Callback for new house created.
+  ///
+  /// [_newHouseData] contains data of new created house.
   cbFunction(_newHouseData) {
-    print("ENTRÓÓ AL CB");
     Toast.show("Casa creada pero no persistida", context);
     this.setState(
       () {
@@ -303,6 +307,23 @@ class _IntroTutorialState extends State<IntroTutorialState> {
       },
     );
     Navigator.pop(context, "Cancel");
-    print(this.houseData);
+    print("Nueva casa con la info " + this.houseData.toString());
+  }
+
+  /// Builds this tutorial.
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xffdfedfe),
+      body: Stack(
+        children: [
+          Image.asset("assets/background_home.png"),
+          new Container(
+            padding: EdgeInsets.all(16.0),
+            child: choosePage(context),
+          ),
+        ],
+      ),
+    );
   }
 }

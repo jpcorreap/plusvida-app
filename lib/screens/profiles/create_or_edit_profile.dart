@@ -803,7 +803,8 @@ class _ProfileFormState extends State<ProfileForm> {
                             margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Número de teléfono " + (true ? "*" : ""),
+                              // TODO pendiente de unificar en numero de telefono
+                              "Número de teléfono ",
                               style: TextStyle(
                                   color: Colors.blueGrey, fontSize: 15.0),
                               textAlign: TextAlign.left,
