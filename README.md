@@ -1,7 +1,45 @@
-# Plus Vida
+# +Vida App
 
-An app that supports and helps Colombian hospitals by easily managing and tracking their patients remotely.
+A mobile application to supports Colombian hospitals managing and tracking their patients remotely.
 
-It is built using Flutter.
+### Technologies implemented
 
-Dartdoc doesn't generates yet a HTML documentation but it can be founded on source code inside lib package.
+- [Flutter]
+- [Firebase]
+
+### Installation
+
+The [Flutter's mobile SDK](https://nodejs.org/) is required.
+
+```sh
+$ cd plusvida-app
+$ flutter pub get
+$ flutter run
+```
+
+For production environments...
+
+```sh
+$ cd plusvida-app
+$ flutter clean
+$ flutter apk build
+```
+
+### Development
+
+Want to contribute? You can contact me!
+
+### Todos
+
+- Dartdoc doesn't works.
+- New requirements and features.
+
+## License
+
+MIT
+
+**Free Software, Hell Yeah!**
+
+[//]:
+[Flutter]: <https://flutter.dev/>
+[Firebase]: <https://firebase.google.com/>
