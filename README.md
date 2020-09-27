@@ -9,7 +9,7 @@ A mobile application to supports Colombian hospitals managing and tracking their
 
 ### Installation
 
-The [Flutter's mobile SDK](https://nodejs.org/) is required.
+The [Flutter's mobile SDK](https://flutter.dev/docs/get-started/install) is required.
 
 ```sh
 $ cd plusvida-app
