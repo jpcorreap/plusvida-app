@@ -36,9 +36,7 @@ Want to contribute? You can contact me!
 
 ## License
 
-[MIT License](https://github.com/jpcorreap/plusvida-app/blob/master/LICENSE)
-Created initially by [Juan Pablo Correa](https://juanpablocorrea.co/) and [Juan Sebastián Alegría](https://github.com/zejiran).
-Now maintained by [Juan Pablo Correa](https://juanpablocorrea.co/).
+[MIT License](https://github.com/jpcorreap/plusvida-app/blob/master/LICENSE). Code created initially by [Juan Pablo Correa](https://juanpablocorrea.co/) and [Juan Sebastián Alegría](https://github.com/zejiran). Now maintained by [Juan Pablo Correa](https://juanpablocorrea.co/).
 
 
 
