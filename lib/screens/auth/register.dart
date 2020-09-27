@@ -2,6 +2,7 @@ import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_19_app/utils/authutils.dart';
 
+/// User Register view 
 class Register extends StatefulWidget {
   final Function toggleView;
   Register({this.toggleView});
@@ -22,6 +23,7 @@ class _RegisterState extends State<Register> {
   String repeatPassword = '';
   String error = '';
 
+  /// Builds register screen.
   @override
   Widget build(BuildContext context) {
     return loading

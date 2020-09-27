@@ -2,6 +2,7 @@ import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_19_app/utils/authutils.dart';
 
+/// Represents Sign In user screen
 class SignIn extends StatefulWidget {
   final Function toggleView;
 
@@ -12,15 +13,25 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  /// Connection to Firebase Authentication.
   final AuthService _auth = AuthService();
+
+  /// Form used for getting users info.
   final _formKey = GlobalKey<FormState>();
+  
+  /// Check if is yet loading or not.
   bool loading = false;
 
-  // Text field state
+  /// Email entered by the user.
   String email = '';
+
+  /// Password chosen by the user.
   String password = '';
+
+  /// Stores an error message in case there is one.
   String error = '';
 
+  /// Builds Sign In screen.
   @override
   Widget build(BuildContext context) {
     return loading

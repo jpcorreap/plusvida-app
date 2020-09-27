@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:covid_19_app/models/user.dart';
 
 class AuthService {
+  /// Connection to Firebase Authentication
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Create user obj based on FirebaseUser
+  // Creates user object based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
   }
