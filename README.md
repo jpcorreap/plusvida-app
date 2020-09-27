@@ -4,8 +4,8 @@ A mobile application to supports Colombian hospitals managing and tracking their
 
 ### Technologies implemented
 
-- [Flutter]
-- [Firebase]
+- [Flutter](https://flutter.dev/).
+- [Firebase](https://firebase.google.com/).
 
 ### Installation
 
@@ -37,9 +37,3 @@ Want to contribute? You can contact me!
 ## License
 
 MIT
-
-**Free Software, Hell Yeah!**
-
-[//]:
-[Flutter]: <https://flutter.dev/>
-[Firebase]: <https://firebase.google.com/>
