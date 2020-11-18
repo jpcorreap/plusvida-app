@@ -34,6 +34,7 @@ class _HouseFormState extends State<HouseForm> {
   var registroUtils;
 
   var departamento;
+  var zona;
   var municipio;
   var direccion;
 
@@ -48,7 +49,35 @@ class _HouseFormState extends State<HouseForm> {
   }
 
   formIsValid(contexto) {
-    if (_direccionController.text == "") {
+
+    if (departamento == null) {
+      Scaffold.of(contexto).showSnackBar(new SnackBar(
+          content: new Text(
+        "Debe seleccionar un departamento",
+        style: TextStyle(fontSize: 18.0),
+      )));
+      return false;
+    }
+
+    if (municipio == null) {
+      Scaffold.of(contexto).showSnackBar(new SnackBar(
+          content: new Text(
+        "Debe seleccionar un municipio",
+        style: TextStyle(fontSize: 18.0),
+      )));
+      return false;
+    }
+
+    if (zona == null) {
+      Scaffold.of(contexto).showSnackBar(new SnackBar(
+          content: new Text(
+        "Debe seleccionar una zona",
+        style: TextStyle(fontSize: 18.0),
+      )));
+      return false;
+    }
+
+        if (_direccionController.text == "") {
       Scaffold.of(contexto).showSnackBar(new SnackBar(
           content: new Text(
         "Debe ingresar una dirección",
@@ -58,12 +87,6 @@ class _HouseFormState extends State<HouseForm> {
     }
 
     return true;
-  }
-
-  publishChanges(contexto) {
-    if (formIsValid(contexto)) {
-      db.createHouse();
-    }
   }
 
   createTextField(controller, keyboardType, decoration) {
@@ -85,6 +108,7 @@ class _HouseFormState extends State<HouseForm> {
     registroUtils = null;
 
     municipio = null;
+    zona = null;
     departamento = null;
 
     _direccionController = TextEditingController();
@@ -209,6 +233,40 @@ class _HouseFormState extends State<HouseForm> {
                               ),
                             ),
                           ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Zona *",
+                              style: TextStyle(
+                                  color: Colors.blueGrey, fontSize: 15.0),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              final result = await showSearch(
+                                context: this.context,
+                                delegate: DataSearch(
+                                  registroUtils["zonas"],
+                                ),
+                              );
+                              if (result != null) {
+                                setState(() {
+                                  zona = json.decode(result);
+                                });
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                zona != null ? zona["value"] : "Elegir...",
+                                style: TextStyle(fontSize: 18.0),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
                           createTextField(
                             _direccionController,
                             TextInputType.text,
@@ -323,14 +381,20 @@ class _HouseFormState extends State<HouseForm> {
                             minWidth: 100.0,
                             color: Color(0xfff42f63),
                             textColor: Colors.white,
-                            child: new Text("Crear casa"),
+                            child: new Text("Crear hogar"),
                             splashColor: Colors.redAccent,
                             onPressed: () => {
-                              callback({
-                                "direccion": _direccionController.text,
-                                "departamento": departamento,
-                                "municipio": municipio,
-                              })
+                              if (formIsValid(context) == true)
+                                {
+                                  callback({
+                                    "direccion": _direccionController.text,
+                                    "departamento": departamento,
+                                    "municipio": municipio,
+                                    "zona": zona,
+                                    "hayCuidador": _cuidador == 1,
+                                    "tamanio": _sizeCasa + 1
+                                  })
+                                }
                             },
                           ),
                           new Padding(

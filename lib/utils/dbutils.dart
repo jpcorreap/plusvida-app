@@ -7,10 +7,15 @@ class DbUtils {
   final CollectionReference usersCol =
       Firestore.instance.collection("usuarios");
 
+  final CollectionReference housesCol = Firestore.instance.collection("casas");
+
   final CollectionReference cuentasCol =
       Firestore.instance.collection("cuentas");
 
   final CollectionReference utilsCol = Firestore.instance.collection("utils");
+
+  final CollectionReference utilidadesCol =
+      Firestore.instance.collection("utilidades");
 
   final CollectionReference dailyCheckCol =
       Firestore.instance.collection("chequeosDiarios");
@@ -36,6 +41,11 @@ class DbUtils {
   // Returns doc of an user
   DocumentReference getUser(id) {
     return usersCol.document(id);
+  }
+
+  // Returns doc of a house
+  DocumentReference getHouse(id) {
+    return housesCol.document(id);
   }
 
   // Returns protocol demo user information
@@ -67,6 +77,14 @@ class DbUtils {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> getHouseInfo(houseID) {
+    return usersCol.where('casa', isEqualTo: houseID).snapshots();
+  }
+
+  Stream<QuerySnapshot> getMyHouse(cabezaDeHogarID) {
+    return usersCol.where('casa', isEqualTo: cabezaDeHogarID).snapshots();
+  }
+
   // Get a QuerySnapshot with all documents of municipios
   Future<QuerySnapshot> getMunicipios() {
     return utilsCol
@@ -78,6 +96,11 @@ class DbUtils {
   // Get a QuerySnapshot with all documents of municipios
   DocumentReference getEPSs() {
     return utilsCol.document("eps");
+  }
+
+  // Get a QuerySnapshot with all documents of municipios
+  DocumentReference getDailyCheckQuestions() {
+    return utilidadesCol.document("preguntasChequeos");
   }
 
   // Get a QuerySnapshot with all documents of tipos de identificacion
@@ -105,6 +128,51 @@ class DbUtils {
 
   // Creates a new user, then makes a relationship between it and the logged user
   // Finally, it returns the new added user ID onto a Future
+  /* Future<String> createUser(userID, data, username) async {
+    String authUID = await getCurrentUserID();
+
+    cuentasCol.document(authUID).get().then((document) => print(document));
+
+
+    .updateData({
+        'usersIDs': FieldValue.arrayUnion([userID]),
+        'usernames': FieldValue.arrayUnion([username])
+      }).then((value) => userID);
+
+
+    // First of all, user is created onto users collection
+    return usersCol.document(userID).setData(data).then((value) {
+      // Later, it needs to be updated in profiles collection
+    });
+  }*/
+
+// Gives to an user the 'profSalud' role
+  Future<void> hacerProfSalud(String userID) {
+    return usersCol.document(userID).updateData({
+      'roles': FieldValue.arrayUnion(['profSalud'])
+    });
+  }
+
+  Future<void> createDailyCheck(results, userID) async {
+    results['usuario'] = userID;
+    dailyCheckCol.add(results);
+  }
+
+  Future updateHouseOfAccount(houseID) async {
+    String authUID = await getCurrentUserID();
+    return cuentasCol.document(authUID).updateData({
+      'casa': houseID,
+    });
+  }
+
+  Future createHouse(houseID, data) async {
+    // First of all, user is created onto users collection
+    return housesCol.document(houseID).setData(data).then((value) {
+      // Later, it needs to be updated in profiles collection
+      return updateHouseOfAccount(houseID);
+    });
+  }
+
   Future<String> createUser(userID, data, username) async {
     String authUID = await getCurrentUserID();
     // First of all, user is created onto users collection
@@ -116,31 +184,4 @@ class DbUtils {
       }).then((value) => userID);
     });
   }
-
-// Gives to an user the 'profSalud' role
-  Future<void> hacerProfSalud(String userID) {
-    return usersCol.document(userID).updateData({
-      'roles': FieldValue.arrayUnion(['profSalud'])
-    });
-  }
-
-  Future<void> createDailyCheck(results, userID) async {
-    var data = {
-      'usuario': userID,
-      'fecha': results[0],
-      'contacto': results[1],
-      'fiebre': results[2],
-      'tos': results[3],
-      'cabeza': results[4],
-      'respirar': results[5],
-      'recaido': results[6],
-      'vomitoODiarrea': results[7],
-      'pruebaCOVID': results[8],
-      'enfermedades': results[9]
-    };
-
-    dailyCheckCol.add(data);
-  }
-
-  void createHouse() {}
 }

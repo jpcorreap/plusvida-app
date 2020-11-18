@@ -15,26 +15,32 @@ class ProfileForm extends StatefulWidget {
   final userData;
   final callback;
   final willBeCabezaDeHogar;
+  final casaID;
+
   ProfileForm(
       {@required this.userData,
       @required this.callback,
-      @required this.willBeCabezaDeHogar});
+      @required this.willBeCabezaDeHogar,
+      @required this.casaID});
 
   @override
   _ProfileFormState createState() => new _ProfileFormState(
       userData: this.userData,
       callback: this.callback,
-      willBeCabezaDeHogar: this.willBeCabezaDeHogar);
+      willBeCabezaDeHogar: this.willBeCabezaDeHogar,
+      casaID: this.casaID);
 }
 
 class _ProfileFormState extends State<ProfileForm> {
   final userData;
   final callback;
   final willBeCabezaDeHogar;
+  final casaID;
   _ProfileFormState(
       {@required this.userData,
       @required this.callback,
-      @required this.willBeCabezaDeHogar});
+      @required this.willBeCabezaDeHogar,
+      @required this.casaID});
 
   // --------------------------------------------
   // Variables required to make this form works
@@ -70,6 +76,7 @@ class _ProfileFormState extends State<ProfileForm> {
   var genero;
   var numTelefono;
   var etnia;
+  var parentesco;
 
   // Controllers for user inputs
   TextEditingController _primNombreController;
@@ -119,7 +126,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   formIsValid(contexto) {
     if (userData != null) {
-      callback();
+      callback(null);
       return true;
     }
 
@@ -168,7 +175,6 @@ class _ProfileFormState extends State<ProfileForm> {
       return false;
     }
 
-    print(willBeCabezaDeHogar);
     if (willBeCabezaDeHogar == true) {
       if (tipoDoc["id"] == "TI" ||
           tipoDoc["id"] == "PA" ||
@@ -186,18 +192,22 @@ class _ProfileFormState extends State<ProfileForm> {
         return false;
       }
 
-      print(calculateAge(selectedDate));
       if (calculateAge(selectedDate) < 18) {
         Snackbar.show(
             "Como será cabeza de hogar, debe ser mayor de edad", contexto);
         return false;
       }
 
+      callback(tipoDoc["id"] + "" + _numDocController.text);
+
       return true;
     }
+
+    return true;
   }
 
   publishChanges(contexto) {
+    print("${this.casaID}  ${this.willBeCabezaDeHogar}");
     if (formIsValid(contexto)) {
       // If it is a new user it means must be created since scratch
       if (userData == null) {
@@ -217,6 +227,10 @@ class _ProfileFormState extends State<ProfileForm> {
               return false;
             } else {
               var user = {
+                'cabezaDeHogar': willBeCabezaDeHogar,
+                'casa': willBeCabezaDeHogar
+                    ? "${tipoDoc['id']}${_numDocController.text}"
+                    : casaID,
                 'primNombre': _primNombreController.text,
                 'segNombre': _segNombreController.text,
                 'primApellido': _primApellidoController.text,
@@ -235,6 +249,12 @@ class _ProfileFormState extends State<ProfileForm> {
                 'riesgo': -1,
               };
 
+              if (willBeCabezaDeHogar == false &&
+                  userData != null &&
+                  userData["parentesco"] != null) {
+                user['parentesco'] = parentesco["value"];
+              }
+
               if (userData == null) {
                 print("\n>> " + user.toString());
                 String username =
@@ -243,15 +263,18 @@ class _ProfileFormState extends State<ProfileForm> {
                 print(
                     "En Profile_form andamos melos y se va a ir a mandar al usuario $username");
 
-                db.createUser(
-                    tipoDoc["id"] +
-                        _numDocController.text
-                            .replaceAll(" ", "")
-                            .toUpperCase(),
-                    user,
-                    username);
-
-                callback();
+                db
+                    .createUser(
+                        tipoDoc["id"] +
+                            _numDocController.text
+                                .replaceAll(" ", "")
+                                .toUpperCase(),
+                        user,
+                        username)
+                    .then((value) {
+                  callback(this.casaID);
+                  Navigator.pop(context);
+                });
               } else {
                 /*db.updateUser(
                   tipoDoc["id"] + _numDocController.text, user
@@ -340,26 +363,17 @@ class _ProfileFormState extends State<ProfileForm> {
     // If there is an existing user
     if (userData != null) {
       print("\n USUARIO PREVIO EXISTENTE: " + userData.toString());
+      dateSelected = true;
       _primNombreController.text = userData["primNombre"];
       _segNombreController.text = userData["segNombre"];
       _primApellidoController.text = userData["primApellido"];
       _segApellidoController.text = userData["segApellido"];
-
       numTelefono = userData["numTelefono"];
       _numTelefonoController.text = userData["numTelefono"][1];
-
       comorbilidades = userData["comorbilidades"];
-
-      dateSelected = true;
       selectedDate = userData['nacimiento'].toDate();
-      nacionalidad = {"id": "", "value": userData["nacionalidad"]};
-
-      eps = {"id": userData["eps"], "value": "PENDIENTE ACTUALIZAR"};
-      tipoEPS = null;
-      departEPS = null;
-      genero = {"id": "", "value": userData["genero"]};
     } else {
-      print("ES UN NUEVO USUARIOOO AAH");
+      print("\n CREANDO UN USUARIO NUEVO");
       genero = null;
       dateSelected = false;
       eps = null;
@@ -369,6 +383,7 @@ class _ProfileFormState extends State<ProfileForm> {
       discapacidad = null;
       nacionalidad = null;
       tipoDoc = null;
+      parentesco = null;
     }
   }
 
@@ -377,6 +392,12 @@ class _ProfileFormState extends State<ProfileForm> {
       db.getEPSs().get().then((document) => setState(() {
             epsUtils = document.data;
             epsUtilsFetched = true;
+            departEPS = null;
+            eps = null;
+
+            if (userData != null)
+              searchEPS(userData["eps"], epsUtils["gubernamentales"],
+                  epsUtils["otras"]);
           }));
     }
     if (registroUtilsFetched == false) {
@@ -384,11 +405,15 @@ class _ProfileFormState extends State<ProfileForm> {
             registroUtils = document.data;
             registroUtilsFetched = true;
 
-            for (var i = 0; i < registroUtils["comorbilidades"].length; i++) {
-              if (userData["comorbilidades"]
-                  .contains(registroUtils["comorbilidades"][i])) {
-                comorbilidadesBool[i] = true;
+            if (userData != null) {
+              for (var i = 0; i < registroUtils["comorbilidades"].length; i++) {
+                if (userData["comorbilidades"]
+                    .contains(registroUtils["comorbilidades"][i])) {
+                  comorbilidadesBool[i] = true;
+                }
               }
+
+              searchAnotherObjOptions(userData, registroUtils);
             }
           }));
     }
@@ -710,16 +735,22 @@ class _ProfileFormState extends State<ProfileForm> {
                           if (tipoEPS != null)
                             GestureDetector(
                               onTap: () async {
-                                final result = await showSearch(
-                                    context: this.context,
-                                    delegate: DataSearch(departEPS != null
-                                        ? epsUtils["gubernamentales"]
-                                            [departEPS["id"]]
-                                        : epsUtils["otras"]));
-                                if (result != null) {
-                                  setState(() {
-                                    eps = json.decode(result);
-                                  });
+                                if (tipoEPS['id'] == 'G' && departEPS == null) {
+                                  Toast.show(
+                                      "Seleccione primero un departamento",
+                                      context);
+                                } else {
+                                  final result = await showSearch(
+                                      context: this.context,
+                                      delegate: DataSearch(departEPS != null
+                                          ? epsUtils["gubernamentales"]
+                                              [departEPS["id"]]
+                                          : epsUtils["otras"]));
+                                  if (result != null) {
+                                    setState(() {
+                                      eps = json.decode(result);
+                                    });
+                                  }
                                 }
                               },
                               child: Container(
@@ -934,6 +965,52 @@ class _ProfileFormState extends State<ProfileForm> {
                             ],
                           ),
                           SizedBox(
+                            height: 10.0,
+                          ),
+                          if (hayQueSolicitarParentesco()) // If it isnt a Cabeza de Hogar, it must specify the Parentesco
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Parentesco con el cabeza de hogar *",
+                                style: TextStyle(
+                                    color: Colors.blueGrey, fontSize: 15.0),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          if (hayQueSolicitarParentesco()) // If it isnt a Cabeza de Hogar, it must specify the Parentesco
+                            GestureDetector(
+                              onTap: () async {
+                                final result = await showSearch(
+                                  context: this.context,
+                                  delegate: DataSearch([
+                                    {'id': 'Padre', 'value': 'Padre'},
+                                    {'id': 'Madre', 'value': 'Madre'},
+                                    {'id': 'Hermano(a)', 'value': 'Hermano(a)'},
+                                    {'id': 'Cónyugue', 'value': 'Cónyugue'},
+                                  ]),
+                                );
+
+                                if (result != null) {
+                                  setState(
+                                    () {
+                                      parentesco = json.decode(result);
+                                    },
+                                  );
+                                }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  parentesco != null
+                                      ? parentesco["value"]
+                                      : "Elegir...",
+                                  style: TextStyle(fontSize: 18.0),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ),
+                          SizedBox(
                             height: 25.0,
                           ),
                           Row(
@@ -963,7 +1040,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                       Navigator.pop(context, "Cancel"),
                                 ),
                               ]),
-                          if (userData != null)
+                          if (userData == null)
                             GestureDetector(
                               child: FlatButton.icon(
                                 icon: SizedBox(),
@@ -1005,5 +1082,81 @@ class _ProfileFormState extends State<ProfileForm> {
               ),
             ],
           );
+  }
+
+  searchEPS(epsABuscar, gubernamentales, otras) {
+    bool encontro = false;
+
+    // If it is a 'otras' EPS
+    for (var i = 0; i < otras.length && encontro == false; i++) {
+      if (otras[i]['id'] == epsABuscar) {
+        encontro = true;
+        tipoEPS = {"id": "O", "value": "Otra"};
+        eps = otras[i];
+      }
+    }
+
+    // It means it must be a
+    if (!encontro) {
+      tipoEPS = {"id": "G", "value": "Gubernamental"};
+      String departamento = epsABuscar.substring(0, 2);
+      departEPS = {"id": departamento, "value": departamento};
+
+      for (var i = 0;
+          i < gubernamentales[departamento].length && encontro == false;
+          i++) {
+        print(gubernamentales[departamento][i]);
+        eps = gubernamentales[departamento][i];
+        encontro = true;
+      }
+    }
+  }
+
+  /// Sets object saved items of the [userData] by using data from [registroUtils]
+  void searchAnotherObjOptions(userData, registroUtils) {
+    parentesco = {
+      'id': userData['parentesco'],
+      'value': userData['parentesco']
+    };
+
+    List generos = registroUtils['generos'];
+    List nacionalidades = registroUtils['nacionalidades'];
+    List etnias = registroUtils['etnias'];
+    List discapacidades = registroUtils['discapacidades'];
+
+    for (var i = 0; i < generos.length && genero == null; i++) {
+      if (generos[i]['id'] == userData['genero'])
+        setState(() {
+          genero = generos[i];
+        });
+    }
+
+    for (var i = 0; i < nacionalidades.length && nacionalidad == null; i++) {
+      if (nacionalidades[i]['value'] == userData['nacionalidad'])
+        setState(() {
+          nacionalidad = nacionalidades[i];
+        });
+    }
+
+    for (var i = 0; i < etnias.length && etnia == null; i++) {
+      if (etnias[i]['id'] == userData['etnia'])
+        setState(() {
+          etnia = etnias[i];
+        });
+    }
+
+    for (var i = 0; i < discapacidades.length && discapacidad == null; i++) {
+      if (discapacidades[i]['id'] == userData['discapacidad'])
+        setState(() {
+          discapacidad = discapacidades[i];
+        });
+    }
+  }
+
+  bool hayQueSolicitarParentesco() {
+    if (willBeCabezaDeHogar == true) return false;
+    if (userData != null && userData["parentesco"] != null) return true;
+    if (userData == null) return true;
+    return false;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:covid_19_app/screens/home/intro_tutorial.dart';
 import 'package:covid_19_app/screens/profiles/create_or_edit_profile.dart';
+import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:covid_19_app/utils/authutils.dart';
 import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:covid_19_app/screens/widgets_utils/loading.dart';
@@ -31,28 +32,28 @@ class _StartState extends State<Start> {
   List userIds;
   List usernames;
   int currentState;
+  String casaID;
 
   DbUtils db = new DbUtils();
 
   void initState() {
     super.initState();
     currentState = 0; // At beginning it sets loading state
-    fetchStartData();
+    refreshData();
   }
 
   final AuthService _auth = AuthService();
 
-  fetchStartData() {
-    //Navigator.pop(context, "Cancel");
+  void refreshData() {
     db.getProfileInfo().then((data) {
       print("Actualización de estado en Start.dart");
-      
+
       setState(() {
         if (data != null) {
           userIds = data["usersIDs"];
           print(data["usersIDs"]);
           usernames = data["usernames"];
-
+          casaID = data['casa'];
           setState(() {
             if (userIds.length == 0)
               currentState = 1; // 1 means it has fetched data
@@ -64,11 +65,16 @@ class _StartState extends State<Start> {
     });
   }
 
+  void addFamiliarSuccess(nada) {
+    Toast.show("Familiar creado exitosamente.", context);
+    refreshData();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (currentState == 0)
       return Loading();
-    else if (currentState == 1) return IntroTutorial(callback: fetchStartData);
+    else if (currentState == 1) return IntroTutorial(callback: refreshData);
 
     return new Scaffold(
       backgroundColor: Color(0xffdfedfe),
@@ -158,7 +164,7 @@ class _StartState extends State<Start> {
               color: Color(0xfff42f63),
               textColor: Colors.white,
               child: new Text(
-                "Agregar una cuenta",
+                "Agregar un familiar",
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
               splashColor: Colors.redAccent,
@@ -167,8 +173,9 @@ class _StartState extends State<Start> {
                 MaterialPageRoute(
                   builder: (context) => ProfileForm(
                     userData: null,
-                    callback: fetchStartData,
+                    callback: addFamiliarSuccess,
                     willBeCabezaDeHogar: false,
+                    casaID: this.casaID,
                   ),
                 ),
               ),

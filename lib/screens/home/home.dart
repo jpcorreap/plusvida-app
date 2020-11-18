@@ -5,6 +5,7 @@ import 'package:covid_19_app/screens/frecuent_questions.dart';
 import 'package:covid_19_app/screens/info_screen.dart';
 import 'package:covid_19_app/screens/my_patients.dart';
 import 'package:covid_19_app/screens/protocols/protocol.dart';
+import 'package:covid_19_app/screens/widgets_utils/custom_card.dart';
 import 'package:covid_19_app/screens/widgets_utils/toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:covid_19_app/screens/multiple_profiles.dart';
@@ -33,7 +34,7 @@ class Home extends StatelessWidget {
   final String userID;
 
   /// Initializes this Home Widget, setting the [userSnapshot] to the current user account.
-  /// 
+  ///
   /// Requires [userID] for the app to know which are the current account chosen.
   Home(this.userID) {
     userSnapshot = db.getUserSnapshot(this.userID);
@@ -94,6 +95,7 @@ class _HomeState extends State<HomeState> {
                   text,
                   style: TextStyle(
                       fontSize: 22.0,
+                      fontFamily: "Lato",
                       fontWeight: FontWeight.bold,
                       color: Color(0xff439aff)),
                 ),
@@ -216,50 +218,48 @@ class _HomeState extends State<HomeState> {
                       context)
                 ]);
           } else if (roles.contains("paciente"))
-            retornar = new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Necesito información\nacerca de...",
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                      fontFamily: "Hind",
-                      color: Color(0xff1e3e65),
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold),
-                ),
-                new SizedBox(
-                  height: 70.0,
-                ),
-                createMenuOption("Preguntas frecuentes",
-                    Icons.perm_device_information, FAQ(), context),
-                createMenuOption("Tránsito seguro en casa", Icons.home,
-                    SecureTransit(), context),
-                createMenuOptionWithSVG(
-                    "Protocolo LyD",
-                    "assets/icons/paciente/protocolo.svg",
-                    InfoScreen(
-                      "Protocolo Limpieza y Desinfección",
-                      Protocol(protocolData: {
-                        'title': 'Protocolo Limpuieza y Desinfección',
-                        'subcategories': [
-                          'Subcategoría 1',
-                          'Subcategoría 2',
-                          'Subcategoría 3'
-                        ]
-                      }),
-                    ),
-                    context)
-              ],
+            retornar = Center(
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Necesito información\nacerca de...",
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                        fontFamily: "Hind",
+                        color: Color(0xff1e3e65),
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  new SizedBox(
+                    height: 60.0,
+                  ),
+                  CustomCard().create("Limpieza y desinfección", () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Protocol(
+                                protocolName:
+                                    "assets/limpieza_y_desinfeccion.json")));
+                  }),
+                  CustomCard().create("Protocolo en casa", () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Protocol(protocolName: "assets/en_casa.json")));
+                  }),
+                ],
+              ),
             );
         }
         break;
       case 3: // Notifications option
         {
           retornar = Text(
-            "Las notificaciones aún no están implementadas.",
-            style: TextStyle(fontSize: 30.0),
+            "Aún no implementado.",
+            style: TextStyle(fontSize: 20.0),
           );
         }
         break;
@@ -304,19 +304,22 @@ class _HomeState extends State<HomeState> {
                 height: 10.0,
               ),
               Text(
-                "Cuidándote cuidas a todos",
-                style: TextStyle(fontSize: 20.0),
+                "Cuidándote cuidas a todos.",
+                style: TextStyle(fontSize: 20.0, fontFamily: "Lato"),
               ),
               new SizedBox(
                 height: 50.0,
               ),
-              createMenuOption("Chequeo diario", Icons.check_box,
-                  DailyCheck(userID), context),
-              // Show users protocol
-              //createMenuOption("Mis protocolos", Icons.short_text,
-              //Protocol(userSnapshot), context),
+              createMenuOption(
+                  "Chequeo diario",
+                  Icons.check_box,
+                  DailyCheck(
+                      userID: userID,
+                      callback: () =>
+                          {print("Se llamó el callback enviado desde Home")}),
+                  context),
               createMenuOption("Emocionómetro", Icons.insert_emoticon,
-                  FavoriteWidget(), context),
+                  Emocionometro(), context),
             ],
           );
         }
@@ -395,7 +398,7 @@ class _HomeState extends State<HomeState> {
     return Scaffold(
       backgroundColor: Color(0xffdfedfe),
       appBar: AppBar(
-        title: Text('Hospital COVID-19',
+        title: Text('+Vida',
             style: TextStyle(
                 color: Color(0xffdfedfe), fontSize: 21, fontFamily: "Hind")),
         backgroundColor: Color(0xff1e3e65),
@@ -410,9 +413,6 @@ class _HomeState extends State<HomeState> {
                 style: TextStyle(color: Color(0xffdfedfe), fontFamily: "Hind")),
             onPressed: () async {
               await _auth.signOut();
-              Toast.show(
-                  "Ya cerró sesión pero hay que darle al botón de back por algo que desconozco. Att Juan Pablo.",
-                  context);
             },
           )
         ],

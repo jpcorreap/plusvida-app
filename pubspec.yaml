@@ -78,6 +78,24 @@ flutter:
     - assets/design_icons/jabon.png
     - assets/bot.png
     - assets/user.png
+    - assets/limpieza_y_desinfeccion.json
+    - assets/en_casa.json
+    - assets/emocionometro/girl_1/abrumado.png
+    - assets/emocionometro/girl_1/ansioso.png
+    - assets/emocionometro/girl_1/aterrado.png
+    - assets/emocionometro/girl_1/bien.png
+    - assets/emocionometro/girl_1/enojado.png
+    - assets/emocionometro/girl_1/feliz.png
+    - assets/emocionometro/girl_1/impotente.png
+    - assets/emocionometro/girl_1/muy_mal.png
+    - assets/emocionometro/girl_1/normal.png
+    - assets/emocionometro/girl_1/triste.png
+
+    - assets/emocionometro/emociones/abrumado.json
+    - assets/emocionometro/emociones/aterrado.json
+    - assets/emocionometro/emociones/muy_mal.json
+    - assets/emocionometro/emociones/enojado.json
+    - assets/emocionometro/emociones/triste.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

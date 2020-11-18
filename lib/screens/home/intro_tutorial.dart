@@ -1,3 +1,4 @@
+import 'package:covid_19_app/utils/dbutils.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_19_app/screens/profiles/create_or_edit_house.dart';
 import 'package:covid_19_app/screens/profiles/create_or_edit_profile.dart';
@@ -40,12 +41,59 @@ class _IntroTutorialState extends State<IntroTutorialState> {
   /// Representa si ya se ha creado una cuenta en el tutorial.
   bool hasCreatedAccount;
 
+  /// Reference to database
+  DbUtils db = new DbUtils();
+
+  bool willBeCabezaDeHogar;
+
+  String houseID;
+
   /// Inicializa el estado de la clase.
   initState() {
     super.initState();
     this._currentIndexPage = 0;
     houseData = null;
     hasCreatedAccount = false;
+    willBeCabezaDeHogar = false;
+    houseID = "";
+  }
+
+  generateRichText(title, description, numberPage) {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      margin: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(20.0),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+                text: '\n$title\n',
+                style: TextStyle(
+                    color: Color(0xff1E3E65),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35.0,
+                    fontFamily: "Hind")),
+            TextSpan(
+              text: '\n\n$description',
+              style: TextStyle(
+                color: Colors.grey,
+                fontFamily: "Lato",
+                fontSize: 20.0,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            TextSpan(
+                text: '\n\n\n$numberPage/4',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ),
+    );
   }
 
   /// Decides wich screen display according to selected index.
@@ -55,46 +103,34 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     switch (_currentIndexPage) {
       case 0:
         {
-          widgetsList.add(Text(
-            "¡Bienvenido a +Vida!\n\nPara usar la app tendrás que vincularte a una casa e ingresar tus datos personales.\n\n",
-            style: TextStyle(
-              fontSize: 25.0,
-            ),
-            textAlign: TextAlign.center,
-          ));
+          widgetsList.add(generateRichText(
+              '¡Bienvenido a +Vida!',
+              'Para usar la app tendrás que vincularte a un hogar e ingresar tus datos personales.',
+              '1'));
         }
         break;
       case 1:
         {
-          widgetsList.add(Text(
-            "Además, con un único correo y contraseña podrás crear y administrar múltiples cuentas.\n\n¡Todo en un mismo lugar!\n\n",
-            style: TextStyle(
-              fontSize: 25.0,
-            ),
-            textAlign: TextAlign.center,
-          ));
+          widgetsList.add(generateRichText(
+              'Tu usuario te facilita la vida',
+              'Desde tu hogar podrás crear y administrar múltiples cuentas.\n\n¡Todo en un mismo lugar!',
+              '2'));
         }
         break;
       case 2:
         {
-          widgetsList.add(Text(
-            "Tu primer paso es vincularte a una Casa.\n\nTodas las Casas tienen un cabeza de hogar.\n\nEsto facilitará el trabajo a los profesionales de la salud.\n\n",
-            style: TextStyle(
-              fontSize: 25.0,
-            ),
-            textAlign: TextAlign.center,
-          ));
+          widgetsList.add(generateRichText(
+              'Configuración de Tu Hogar',
+              'Al gestionar Tu Hogar, facilitas enormemente el trabajo de los profesionales de la salud.\n\n¡Comienza creando un hogar o uniéndote a uno!',
+              '3'));
         }
         break;
       case 3:
         {
-          widgetsList.add(Text(
-            "¡Muy bien!\n\nAhora solo falta un último paso, crear tu primera cuenta:\n\n",
-            style: TextStyle(
-              fontSize: 25.0,
-            ),
-            textAlign: TextAlign.center,
-          ));
+          widgetsList.add(generateRichText(
+              'Creación de cuenta',
+              '¡Muy bien!\n\nAhora solo falta un último paso, crear tu primera cuenta:',
+              '4'));
         }
         break;
       default: // IntroTutorial
@@ -105,6 +141,9 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     }
 
     // Crea los botones de navegacion.
+    widgetsList.add(SizedBox(
+      height: 30.0,
+    ));
     widgetsList.add(createNavButtons());
 
     return Center(
@@ -144,14 +183,14 @@ class _IntroTutorialState extends State<IntroTutorialState> {
             minWidth: 100.0,
             color: Color(0xfff42f63),
             textColor: Colors.white,
-            child: new Text("Crear casa"),
+            child: new Text("Crear Hogar"),
             splashColor: Colors.redAccent,
             onPressed: () => {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => HouseForm(
-                    callback: cbFunction,
+                    callback: persistHouseData,
                   ),
                 ),
               ),
@@ -168,7 +207,7 @@ class _IntroTutorialState extends State<IntroTutorialState> {
             textColor: Colors.white,
             child: new Text("Unirme"),
             splashColor: Colors.redAccent,
-            onPressed: () => {Toast.show("Aún no implementado", context)},
+            onPressed: () => {showJoin()},
           ),
         if (_currentIndexPage == 3)
           new MaterialButton(
@@ -179,22 +218,22 @@ class _IntroTutorialState extends State<IntroTutorialState> {
             child: new Text(
                 hasCreatedAccount == false ? "Crear cuenta" : "Ir a mi inicio"),
             splashColor: Colors.redAccent,
-            onPressed: () => {
-              if (hasCreatedAccount == false)
-                {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileForm(
-                        userData: null,
-                        callback: onAccountSuccedCreated,
-                        willBeCabezaDeHogar: true,
-                      ),
+            onPressed: () {
+              if (hasCreatedAccount == false) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileForm(
+                      userData: null,
+                      callback: onAccountSuccedCreated,
+                      willBeCabezaDeHogar: this.willBeCabezaDeHogar,
+                      casaID: this.houseID,
                     ),
                   ),
-                }
-              else
-                {this.callback()}
+                );
+              } else {
+                this.callback();
+              }
             },
           ),
         if (_currentIndexPage == 3)
@@ -207,7 +246,7 @@ class _IntroTutorialState extends State<IntroTutorialState> {
             minWidth: 100.0,
             color: Color(0xfff42f63),
             textColor: Colors.white,
-            child: new Text("Siguiente"),
+            child: new Text("¡Entendido!"),
             splashColor: Colors.redAccent,
             onPressed: () => setState(() {
               _currentIndexPage = _currentIndexPage + 1;
@@ -221,6 +260,8 @@ class _IntroTutorialState extends State<IntroTutorialState> {
     );
   }
 
+  TextEditingController _casaExistente = TextEditingController();
+
   /// Displays a dialog to login into a House.
   void showJoin() {
     showDialog(
@@ -229,18 +270,14 @@ class _IntroTutorialState extends State<IntroTutorialState> {
         return Dialog(
           elevation: 16,
           child: Container(
-            height: 300.0,
+            height: 270.0,
             width: 300.0,
             margin: const EdgeInsets.all(20.0),
             child: ListView(
               children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                ),
-                SizedBox(height: 20),
                 Center(
                   child: Text(
-                    "Ingresa el código de la casa",
+                    "Ingresa el identificador de la casa",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,
@@ -251,32 +288,52 @@ class _IntroTutorialState extends State<IntroTutorialState> {
                 ),
                 SizedBox(height: 50),
                 new TextFormField(
+                  controller: _casaExistente,
                   decoration: new InputDecoration(
-                    labelText: "Código",
+                    labelText: "Identificador",
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
                       borderSide: new BorderSide(),
                     ),
-                    //fillColor: Colors.green
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   style: new TextStyle(
-                    fontFamily: "Poppins",
+                    fontFamily: "Lato",
                   ),
                 ),
                 SizedBox(height: 60),
                 new MaterialButton(
-                    height: 40.0,
-                    minWidth: 100.0,
-                    color: Color(0xfff42f63),
-                    textColor: Colors.white,
-                    child: new Text("Buscar"),
-                    splashColor: Colors.redAccent,
-                    onPressed: () {
-                      this.callback();
-                      Navigator.pop(context);
-                    }),
+                  height: 40.0,
+                  color: Color(0xfff42f63),
+                  textColor: Colors.white,
+                  child: new Text("Buscar"),
+                  splashColor: Colors.redAccent,
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    db.getHouse(_casaExistente.text).get().then(
+                      (doc) {
+                        if (doc.data == null) {
+                          Toast.show(
+                              "No se encontró un hogar con ese identificador.",
+                              this.context);
+                        } else {
+                          db
+                              .updateHouseOfAccount(_casaExistente.text)
+                              .then((value) => this.setState(() {
+                                    _currentIndexPage = _currentIndexPage + 1;
+                                    Toast.show(
+                                        "Correo y contraseña vinculadas a la casa ${_casaExistente.text}",
+                                        this.context);
+                                    setState(() {
+                                      this.willBeCabezaDeHogar = false;
+                                      this.houseID = _casaExistente.text;
+                                    });
+                                  }));
+                        }
+                      },
+                    );
+                  },
+                )
               ],
             ),
           ),
@@ -286,9 +343,12 @@ class _IntroTutorialState extends State<IntroTutorialState> {
   }
 
   /// Callback for succed account created
-  onAccountSuccedCreated() {
+  void onAccountSuccedCreated(cabezaDeHogarID) {
     Toast.show("Cuenta creada exitosamente", context);
-    Navigator.pop(context, "");
+
+    if (cabezaDeHogarID != null)
+      db.createHouse(cabezaDeHogarID, houseData).then((value) {});
+
     setState(() {
       this.hasCreatedAccount = true;
     });
@@ -298,16 +358,19 @@ class _IntroTutorialState extends State<IntroTutorialState> {
   /// Callback for new house created.
   ///
   /// [_newHouseData] contains data of new created house.
-  cbFunction(_newHouseData) {
-    Toast.show("Casa creada pero no persistida", context);
+  void persistHouseData(_newHouseData) {
+    // La casa no se puede persistir aqui porque se necesita el documento de la persona cabeza de hogar
     this.setState(
       () {
         this.houseData = _newHouseData;
         _currentIndexPage = _currentIndexPage + 1;
+        this.willBeCabezaDeHogar = true;
       },
     );
+    Toast.show("Información validada. Cree una cuenta para persistir el hogar.",
+        context);
     Navigator.pop(context, "Cancel");
-    print("Nueva casa con la info " + this.houseData.toString());
+    print("SE TIENE INFO DE LA CASA " + this.houseData.toString());
   }
 
   /// Builds this tutorial.

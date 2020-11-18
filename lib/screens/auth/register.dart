@@ -2,7 +2,7 @@ import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_19_app/utils/authutils.dart';
 
-/// User Register view 
+/// User Register view
 class Register extends StatefulWidget {
   final Function toggleView;
   Register({this.toggleView});
@@ -161,9 +161,12 @@ class _RegisterState extends State<Register> {
                                                       ),
                                                     ),
                                                     SizedBox(height: 20),
-                                                    Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit tortor vel urna convallis lobortis. Aliquam hendrerit congue lorem, in vulputate tellus rutrum sit amet. Phasellus viverra sollicitudin tempor.\n\nSuspendisse quis tincidunt lorem. Maecenas vitae tellus ex. Nulla ipsum magna, facilisis sed fermentum ac, commodo ut purus. Integer at leo quam. Pellentesque malesuada lectus suscipit, lobortis nisi quis, blandit ante. Nulla lacinia lectus eu blandit dictum.\n\nQuisque tellus nibh, maximus non enim nec, ultrices cursus sapien. In eleifend nisi sem, non tristique odio eleifend et. Aenean cursus purus vel elit vulputate, ut euismod leo ullamcorper. Cras ac magna diam. Suspendisse semper egestas dictum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", textAlign: TextAlign.justify,),
+                                                    Text(
+                                                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit tortor vel urna convallis lobortis. Aliquam hendrerit congue lorem, in vulputate tellus rutrum sit amet. Phasellus viverra sollicitudin tempor.\n\nSuspendisse quis tincidunt lorem. Maecenas vitae tellus ex. Nulla ipsum magna, facilisis sed fermentum ac, commodo ut purus. Integer at leo quam. Pellentesque malesuada lectus suscipit, lobortis nisi quis, blandit ante. Nulla lacinia lectus eu blandit dictum.\n\nQuisque tellus nibh, maximus non enim nec, ultrices cursus sapien. In eleifend nisi sem, non tristique odio eleifend et. Aenean cursus purus vel elit vulputate, ut euismod leo ullamcorper. Cras ac magna diam. Suspendisse semper egestas dictum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                    ),
                                                     SizedBox(height: 20),
-
                                                     new MaterialButton(
                                                       height: 40.0,
                                                       minWidth: 100.0,
@@ -184,8 +187,21 @@ class _RegisterState extends State<Register> {
                                             );
                                           },
                                         ),
-                                        child: Text(
-                                          "Acepto términos y condiciones.",
+                                        child: Text.rich(
+                                          TextSpan(
+                                            text: 'Acepto ',
+                                            style: TextStyle(fontSize: 13),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                  text:
+                                                      'términos y condiciones',
+                                                  style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      fontSize: 13)),
+                                              // can add more TextSpans here...
+                                            ],
+                                          ),
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       )
@@ -213,8 +229,7 @@ class _RegisterState extends State<Register> {
                                             error =
                                                 "Debe aceptar términos y condiciones";
                                           });
-                                        }
-                                        else if (password != repeatPassword) {
+                                        } else if (password != repeatPassword) {
                                           setState(() {
                                             error =
                                                 "Las contraseñas no coinciden";

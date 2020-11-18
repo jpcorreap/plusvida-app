@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'create_or_edit_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'house_dashboard.dart';
+
 class Profile extends StatefulWidget {
   final Stream stream;
 
@@ -266,26 +268,50 @@ class _ProfileState extends State<Profile> {
             new Padding(
               padding: const EdgeInsets.only(top: 15.0),
             ),
-            new MaterialButton(
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text("Editar perfil"),
-              splashColor: Colors.redAccent,
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileForm(
-                      userData: userData,
-                      callback: cbFunction,
-                      willBeCabezaDeHogar: false,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                new MaterialButton(
+                  color: Color(0xfff42f63),
+                  textColor: Colors.white,
+                  child: new Text("Editar perfil"),
+                  splashColor: Colors.redAccent,
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileForm(
+                          userData: userData,
+                          callback: cbFunction,
+                          willBeCabezaDeHogar: false,
+                        ),
+                      ),
                     ),
-                  ),
+                  },
+                  onLongPress: () => Toast.show(
+                      "Solicitud de colaboración enviada al administrador",
+                      context),
                 ),
-              },
-              onLongPress: () => Toast.show(
-                  "Solicitud de colaboración enviada al administrador",
-                  context),
+                if (doc["cabezaDeHogar"] == true)
+                  SizedBox(
+                    width: 30.0,
+                  ),
+                if (doc["cabezaDeHogar"] == true)
+                  new MaterialButton(
+                    color: Color(0xfff42f63),
+                    textColor: Colors.white,
+                    child: new Text("Mi Hogar"),
+                    splashColor: Colors.redAccent,
+                    onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HouseDashboard(db.getHouseInfo(userData["id"])),
+                      ),
+                    ),
+                  },
+                  ),
+              ],
             ),
             /*Row(
                                     children: [
@@ -345,8 +371,7 @@ class _ProfileState extends State<Profile> {
 
   cbFunction() {
     print("ENTRÓÓ");
-    Toast.show(
-        "Esto simula que ya se actualizó pero está pendiente validar un par de cuestiones con la información", context);
+    Toast.show("Datos actualizados. PENDIENTE REVISAR.", context);
     Navigator.pop(this.context);
   }
 }

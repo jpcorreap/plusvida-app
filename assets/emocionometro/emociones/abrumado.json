@@ -1,0 +1,86 @@
+{
+  "title": "Me siento abrumado",
+  "subcategories": [
+    {
+      "title": "Tómate un momento y respira",
+      "book": [
+        [
+          {
+            "type": "text",
+            "text": "- Recuerda cerrar los ojos, ser consciente de tu respiración y concentrarte en ella"
+          },
+          {
+            "type": "text",
+            "text": "- Permite que la respiración invada todo tu cuerpo"
+          },
+          {
+            "type": "text",
+            "text": "- Ahora continúa con tu rutina y repite este ejercicio las veces que sea necesario"
+          }
+        ]
+      ]
+    },
+    {
+      "title": "Manejando el tiempo en cuarentena",
+      "book": [
+        [
+          {
+            "type": "text",
+            "text": "Una de las ideas es crear una agenda semanal para organizar tiempos como: tiempo de escuela en casa, tiempo de juegos de mesa, tiempo de tareas domésticas, tiempo de ejercicio, tiempo de leer, tiempo de juego libre, tiempo de celular o computadora, tiempo de ver televisión, entre otros..."
+          },
+          {
+            "type": "text",
+            "text": "También es recomendable hablar en familia de la “dieta digital”, es decir, al igual que con la dieta alimenticia, pensar cómo podemos distribuir en la jornada el tiempo de uso de pantallas para aprovecharlas de manera más consciente (tiempo para estar conectados estudiando, tiempo de ocio para estar conectados y tiempo para desconectarnos)."
+          }
+        ]
+      ]
+    },
+    {
+      "title": "Retomando las labores cotidianas",
+      "book": [
+        [
+          {
+            "type": "text",
+            "text": "Lo más importante al momento de retomar tus ocupaciones es que tengas un orden y estabilidad para alcanzar tu propósito de poner toda tu actitud y desempeñarte en tus labores."
+          },
+          {
+            "type": "text",
+            "text": "- Establece un orden. La clave principal para lograr tus metas laborales es empezar estableciendo orden para todo lo que harás. Cuando tienes claras tus actividades, puedes planificarlas y realizarlas mejor."
+          },
+          {
+            "type": "text",
+            "text": "- Adecúa tu alimentación. Comer bien te permitirá contar con toda la energía y la fuerza física para concentrarte y estar dispuesto a cualquier actividad."
+          },
+          {
+            "type": "text",
+            "text": "- Aprovecha las pausas. Cada vez que tengas la posibilidad de hacer una pausa activa aprovéchala para reactivarte. Por ejemplo, durante el almuerzo puedes compartir con tu familia."
+          },
+          {
+            "type": "text",
+            "text": "- Descansa lo suficiente. Es vital dormir mínimo ocho horas diarias para contar con el rendimiento físico y mental necesario para el trabajo. Procura dejar las labores finalizadas en el día, no durante la noche."
+          },
+          {
+            "type": "text",
+            "text": "- Ejercita tu cuerpo. Practica algún deporte, esto te permitirá tener un estado de relajación que te permitirá perder algo de tensión y adquirir fuerza corporal y mental."
+          },
+          {
+            "type": "text",
+            "text": "- Cumple con tus horarios. Planear adecuadamente te permitirá cumplir con tus labores pendientes en el tiempo que corresponde, sin necesidad de sacrificar tu tiempo libre o en familia para trabajar los fines de semana."
+          },
+          {
+            "type": "text",
+            "text": "- Date permiso para sentirte mal. No pienses que es incorrecto sentirse triste, alterado o preocupado, es importante que permita el paso por tus emociones."
+          },
+          {
+            "type": "text",
+            "text": "Evita los excesos. Evita el abuso de alcohol, drogas o medicación. Con estas sustancias solo aplazamos y enmascaramos la aparición de reacciones."
+          },
+          {
+            "type": "text",
+            "text": "Piensa de manera realista y positiva. No anticipes una consecuencia peor. No es saludable anticipar o adivinar que puede aparecer un daño mayor o una catástrofe. Valora el riesgo en su justa medida."
+          }
+        ]
+      ]
+    }
+  ]
+}

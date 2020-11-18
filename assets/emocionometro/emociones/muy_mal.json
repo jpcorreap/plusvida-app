@@ -1,0 +1,47 @@
+{
+  "title": "Me siento muy mal",
+  "subcategories": [
+    {
+      "title": "Siento que estoy en crisis (reconocer la crisis)",
+      "book": [
+        [
+          {
+            "type": "title",
+            "category": "3",
+            "text": "¿Cómo reconocer un proceso de crisis?"
+          },
+          {
+            "type": "text",
+            "text": "Aunque todas las crisis son diferentes, existen algunos elementos que pueden ayudar a reconocer cuando alguien se encuentra en un proceso de crisis:\nLa persona no encuentra solución a sus problemas, tiene un sentimiento de impotencia el cual lo hace incapaz de enfrentar las cosas y no consigue claridad para pensar en soluciones.\nSe tiene un cansancio o agotamiento que le impide dormir bien, se genera un agotamiento sin haber realizado mucha actividad.\nExiste una desorganización tanto en lo externo como en lo interno, que lo pone en desequilibrio, por lo que abandona sus hábitos o tareas cotidianas.\nSon notorios los síntomas de angustia o ansiedad y algunos de sus signos físicos:\n- Dolor o molestias torácicos.\n- Sensación de asfixia.\n- Mareo, inestabilidad o desmayos.\n- Miedo a morir.\n- Miedo de llegar a la locura o a perder el control.\n- Sentimientos de irrealidad o de extrañamiento en relación con el propio entorno.\n- Sofocos o escalofríos.\n-Náuseas, dolor de estómago o diarrea.\nHay sentimientos que le generan pensamientos sobre su persona en los que cree no ser adecuado para la vida; se siente atosigado, molesto y abrumado; hay una sensación de desamparo y vacío existencial que lo puede poner muy triste o violento."
+          }
+        ]
+      ]
+    },
+    {
+      "title": "Etapas del proceso de crisis",
+      "book": [
+        [
+          {
+            "type": "text",
+            "text": "1. La experiencia presente: el evento que provoca la crisis, es decir, lo que detona la explosión emocional agresiva o violenta.\n2. Respuesta a la experiencia: desde la tensión emocional o el estrés tanto físico como psicológico. Puede haber reacciones diferentes que podemos describir como:\n3. Parálisis: mecanismo de defensa que nos bloquea la capacidad de reaccionar cuando algo nos está sobrepasando.\n4. Caos explosivo: se pierde el control de las emociones y pensamientos, desencadenando reacciones con llanto extremo, gritos y fuertes movimientos corporales.\n5. Negación de las cosas: no se acepta el sentimiento, se evitan los pensamientos sobre la crisis, se evade de la situación.\n6. Intrusión en la mente: una vez aceptada la crisis, la intrusión son esos pensamientos que llegan sin que uno los genere sobre la crisis y que desencadenan reacciones emocionales.\n7. La estabilización en la experiencia: La persona comienza a serenarse y a recobrar el control de sus pensamientos, emociones, y acciones. Descubre opciones para enfrentar el escenario adverso y puede ir sucediendo de esta forma:\n8. Penetración: es el momento donde identifico o clarifico, expreso o comunico, lo que está sucediendo internamente con mis pensamientos o sentimientos sobre la experiencia de crisis. Se puede llegar a este punto por auto observación o con ayuda de la reflexión con familiares.\n9. Consumación: la persona integra la experiencia en su vida, logra ponerles nombre a sus emociones, admite la desorganización interna de emociones y busca establecer mecanismos o estrategias, para salir de esos estados emocionales negativos, es un campo fértil y creativo donde surge el potencial positivo de la experiencia de crisis.\n10. Adaptación y aprendizaje de la experiencia: aquí la persona o la familia están fortalecidos, tienen la ventaja de su propia experiencia y la aprovechan a favor de retomar el control de su vida fraterna. Se hacen las paces entre ellos o consigo mismo asumiendo los errores o situaciones y caminando con la f rente en alto, con la dignidad reestablecida."
+          }
+        ]
+      ]
+    },
+    {
+      "title": "A dónde acudir si necesito ayuda",
+      "book": [
+        [
+          {
+            "type": "text",
+            "text": "Puedes consultar toda la información en el siguiente enlace:"
+          },
+          {
+            "type": "text",
+            "text": "https://coronaviruscolombia.gov.co/Covid19/lineas-de-atencion-eps.html"
+          }
+        ]
+      ]
+    }
+  ]
+}

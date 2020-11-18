@@ -1,149 +1,143 @@
-import 'package:covid_19_app/screens/protocols/subcategory.dart';
+import 'dart:convert';
+import 'package:covid_19_app/screens/protocols/book.dart';
+import 'package:covid_19_app/screens/protocols/protocol_utils.dart';
+import 'package:covid_19_app/screens/widgets_utils/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Protocol extends StatefulWidget {
-  final protocolData;
+  final protocolName;
   final context;
 
-  Protocol({Key key, this.protocolData, this.context}) : super(key: key);
+  Protocol({Key key, this.protocolName, this.context}) : super(key: key);
 
   @override
   _ProtocolState createState() =>
-      _ProtocolState(this.protocolData, this.context);
+      _ProtocolState(this.protocolName, this.context);
 }
 
 class _ProtocolState extends State<Protocol> {
-  final protocolData;
+  final protocolName;
   final context;
+  var protocolData;
+  bool protocolFetched;
 
-  _ProtocolState(this.protocolData, this.context);
+  ProtocolUtils pu = ProtocolUtils();
 
-  final newData = [
-    {
-      "name": "Jabón",
-      "image": "assets/icons/design_icons/jabon.png",
-      "description":
-          "El jabón afecta la membrana lipídica del virus, por lo que se recomienda su uso. Puede utilizar el jabón de su agrado."
-    },
-    {
-      "name": "Desinfectante",
-      "image": "assets/icons/design_icons/alcohol_70.png",
-      "description":
-          "Existen distintos tipos de desinfectante, se recomienda usarlos con precaución debido a que algunos pueden generar irritación en los ojos, piel o mucosas. Se recomienda para la limpieza de pisos hipoclorito de uso doméstico."
-    },
-    {
-      "name": "Alcohol al 70%",
-      "image": "assets/icons/design_icons/alcohol_70.png",
-      "description":
-          "Se debe aplicar para la desinfección como se detalla en el apartado de desinfección de la casa."
-    },
-    {
-      "name": "Alcohol glicerinado",
-      "image": "assets/icons/design_icons/alcohol_glicerinado.png",
-      "description":
-          "Se puede usar para el lavado de manos en los momentos que no se cuente con agua y jabón y las manos están visualmente limpias."
-    }
-  ];
+  int currentBook;
+  List<Book> books;
 
-  var index;
+  _ProtocolState(this.protocolName, this.context);
 
-  Card generateListItem(String info) {
-    return Card(
-      child: GestureDetector(
-        onTap: () => showSubcategory(info),
+  GestureDetector generateListItem(var title, int index) {
+    return GestureDetector(
+      onTap: () => setState(() {
+        currentBook = index;
+      }),
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 7.0),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                info,
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.all(15.0),
+          child: Container(
+            width: 300,
+            child: pu.buildTitle({"text": title, "category": 2})),
         ),
       ),
     );
   }
 
+  List<Widget> generateProtocolMenu() {
+    List<Widget> widgets = [
+      SizedBox(height: 50.0),
+      pu.buildTitle({"text": protocolData["title"], "category": 1}),
+    ];
+
+    int index = 0;
+
+    for (var subcategory in protocolData["subcategories"]) {
+      widgets.add(generateListItem(subcategory["title"], index));
+      index++;
+    }
+
+    widgets.add(SizedBox(
+      height: 20.0,
+    ));
+
+    return widgets;
+  }
+
   void initState() {
     super.initState();
-    index = 0;
+    currentBook = -1;
+    protocolData = null;
+    protocolFetched = false;
+    books = [];
   }
 
   @override
   Widget build(BuildContext context) {
-    return index != 0
-        ? Subcategory(title: 'Recursos necesarios para la desinfección')
-        : Column(
-            children: [
-              SizedBox(
-                height: 20.0,
+    if (protocolFetched == false) {
+      rootBundle.loadString(protocolName).then((value) {
+        setState(() {
+          protocolData = jsonDecode(value);
+          for (var subcategory in protocolData["subcategories"]) {
+            books.add(new Book(data: subcategory, context: this.context));
+          }
+          protocolFetched = true;
+        });
+      });
+    }
+
+    return protocolFetched == false
+        ? Loading()
+        : Scaffold(
+            backgroundColor: Color(0xffdfedfe),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                child: Stack(children: [
+                  new Image.asset("assets/background_home.png"),
+                  new Center(
+                    child: new Container(
+                      margin: EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(children: generateProtocolMenu()),
+                    ),
+                  ),
+                  if (currentBook >= 0)
+                  Container(
+                    width: 500,
+                    height: 700,
+                    color: Color(0xffDFEDFE),
+                  ),
+                  new GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Icon(Icons.arrow_back),
+                    ),
+                  ),
+                  if (currentBook >= 0)
+                  Container(
+                    margin: EdgeInsets.fromLTRB(15, 60, 15, 50),
+                    child: books[currentBook]),
+                  if (currentBook >= 0)
+                  Container(
+                    width: 500,
+                    color: Color(0xffDFEDFE),
+                    child: Center(
+                        child: new MaterialButton(
+                          color: Color(0xfff42f63),
+                          textColor: Colors.white,
+                          child: new Text("Cerrar"),
+                          splashColor: Colors.redAccent,
+                          onPressed: () => setState(() {
+                            currentBook = -1;
+                          }),
+                        ),
+                      ),
+                  ),
+                ]),
               ),
-              generateListItem("Recursos necesarios para\nla desinfección"),
-              generateListItem("Subcategoría genérica 2"),
-              generateListItem("Subcategoría genérica 3"),
-              generateListItem("Subcategoría genérica 4"),
-              generateListItem("Subcategoría genérica 5"),
-              generateListItem("Subcategoría genérica 6"),
-              SizedBox(
-                height: 20.0,
-              ),
-            ],
+            ),
           );
-  }
-
-  showSubcategory(String info) {
-    print("Se va a cambiar el estado");
-    setState(() {
-      this.index = 1;
-    });
-  }
-
-  Widget chooseScreen(user, context) {
-    return Center(child: Text("$index", style: TextStyle(fontSize: 20.0)));
-  }
-
-  Widget createNavButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (index != 0)
-          new MaterialButton(
-              height: 40.0,
-              minWidth: 90.0,
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text("Anterior"),
-              splashColor: Colors.redAccent,
-              onPressed: () => setState(() {
-                    index = index - 1;
-                  })),
-        if (index > 0 && index < 10)
-          SizedBox(
-            width: 10.0,
-          ),
-        if (index != 10)
-          new MaterialButton(
-              height: 40.0,
-              minWidth: 90.0,
-              color: Color(0xfff42f63),
-              textColor: Colors.white,
-              child: new Text("Siguiente"),
-              splashColor: Colors.redAccent,
-              onPressed: () => setState(() {
-                    index = index - 1;
-                  })),
-      ],
-    );
   }
 }
